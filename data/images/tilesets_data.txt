@@ -1,0 +1,7 @@
+#folder_name,tileset_name,width,height,spacing
+platform_tilesets outer_grass_tileset 16 16 0
+platform_tilesets inner_grass_tileset 16 16 0
+platform_tilesets outer_dirt_tileset 16 16 0
+platform_tilesets inner_dirt_tileset 16 16 0
+platform_tilesets outer_stone_tileset 16 16 0
+platform_tilesets inner_stone_tileset 16 16 0
