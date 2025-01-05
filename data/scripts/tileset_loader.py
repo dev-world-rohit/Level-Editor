@@ -77,14 +77,15 @@ class TileSetManager:
     def display_tilesets(self, display, text, screen_size, mouse_pos, click):
 
         for tile_image in self.tileset_data[self.current_tileset]:
-            tile = scale_image_ratio(tile_image, self.ratio)
-
+            tile = tile_image
             if screen_size[0] - 200 < mouse_pos[0] < screen_size[0] and \
-                    self.pos_y - self.tile_spacing // 2 < mouse_pos[1] < self.pos_y + tile.get_height() + self.tile_spacing // 2:
-                pygame.draw.rect(display, (0, 149, 239), (0, self.pos_y - self.tile_spacing // 2, 200, tile.get_height() + self.tile_spacing))
-
-            display.blit(tile, (10, self.pos_y))
-            self.pos_y += tile.get_height() + self.tile_spacing
+                    self.pos_y - self.tile_spacing // 2 < mouse_pos[1] < self.pos_y + tile.get_height() * self.ratio + self.tile_spacing // 2:
+                pygame.draw.rect(display, (0, 149, 239), (0, self.pos_y - self.tile_spacing // 2, 200, tile.get_height() * self.ratio + self.tile_spacing))
+                if click:
+                    pass
+                    self.tile = tile
+            display.blit(scale_image_ratio(tile, self.ratio), (10, self.pos_y))
+            self.pos_y += tile.get_height() * self.ratio + self.tile_spacing
 
         self.pos_y = self.initial_pos_y
 

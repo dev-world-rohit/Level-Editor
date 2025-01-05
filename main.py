@@ -12,7 +12,8 @@ class GameWindow:
         self.tile_size = [16, 16]
         self.tile_number = [30, 20]
         self.ratio = 2
-        self.screen_size = [(self.tile_size[0] * self.tile_number[0]) * self.ratio + 201, (self.tile_size[1] * self.tile_number[1]) * self.ratio]
+        self.screen_size = [(self.tile_size[0] * self.tile_number[0]) * self.ratio + 201, (self.tile_size[1] *
+                                                                                           self.tile_number[1]) * self.ratio]
         self.screen = pygame.display.set_mode(self.screen_size)
         pygame.display.set_caption("Level Editor")
         pygame.display.set_icon(pygame.image.load("data/images/level_editor.png"))
@@ -36,6 +37,10 @@ class GameWindow:
             self.tileset_display.fill((0, 0, 0))
 
             self.tileset_manager.display_tilesets(self.tileset_display, self.text, self.screen_size, mouse_pos, click)
+
+            self.editor_display.blit(self.tileset_manager.tile, (((mouse_pos[0] // self.ratio) // 16) *
+                                     16, ((mouse_pos[1] // self.ratio)
+                                          // 16) * 16))
 
             for event in pygame.event.get():
                 if event.type == QUIT:
