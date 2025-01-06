@@ -37,6 +37,7 @@ class TileSetManager:
         self.initial_pos_y = 50
         self.pos_y = self.initial_pos_y
         self.tile_spacing = 20
+        self.click = False
 
         self.ratio = 3
 

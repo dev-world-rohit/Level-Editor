@@ -4,6 +4,8 @@ from pygame.locals import *
 from data.scripts.font import Font
 from data.scripts.clock import Clock
 from data.scripts.tileset_loader import TileSetManager
+from data.scripts.editor_manager import EditorManager
+
 
 class GameWindow:
     def __init__(self):
@@ -22,13 +24,14 @@ class GameWindow:
         self.tileset_display = pygame.Surface((200, self.screen_size[1]))
 
         self.text = Font('small_font.png', (255, 255, 255), 2)
+        self.editor_text = Font('small_font.png', (255, 255, 255), 1)
         self.clock = Clock(30)
         self.tileset_manager = TileSetManager()
+        self.editor_manager = EditorManager()
 
         self.game = True
 
     def main_loop(self):
-        click = False
         while self.game:
             mouse_pos = pygame.mouse.get_pos()
 
@@ -36,11 +39,28 @@ class GameWindow:
             self.editor_display.fill((0, 0, 0))
             self.tileset_display.fill((0, 0, 0))
 
-            self.tileset_manager.display_tilesets(self.tileset_display, self.text, self.screen_size, mouse_pos, click)
+            self.tileset_manager.display_tilesets(self.tileset_display, self.text, self.screen_size, mouse_pos,
+                                                  self.tileset_manager.click)
 
             self.editor_display.blit(self.tileset_manager.tile, (((mouse_pos[0] // self.ratio) // 16) *
                                      16, ((mouse_pos[1] // self.ratio)
                                           // 16) * 16))
+
+            self.editor_manager.show_layer(self.editor_display, self.editor_text)
+            self.editor_manager.change_offset(self.tile_size[0])
+            if self.editor_manager.click:
+                pos = [(((mouse_pos[0]) // self.ratio) // 16) *
+                       16, (((mouse_pos[1]) // self.ratio)
+                            // 16) * 16]
+                self.editor_manager.add_tile([self.tileset_manager.current_tileset,
+                                              self.tileset_manager.tile], pos)
+            if self.editor_manager.erase_click:
+                pos = [((mouse_pos[0] // self.ratio) // 16) *
+                       16, ((mouse_pos[1] // self.ratio)
+                            // 16) * 16]
+                self.editor_manager.remove_tile(pos)
+
+            self.editor_manager.show_map(self.editor_display)
 
             for event in pygame.event.get():
                 if event.type == QUIT:
@@ -49,31 +69,57 @@ class GameWindow:
                 if event.type == pygame.KEYDOWN:
                     if event.key == K_r:
                         self.tileset_manager.change_tileset_number(1)
-                    if event.key == K_e:
+                    if event.key == K_w:
                         self.tileset_manager.change_tileset_number(-1)
+                    if event.key == K_3:
+                        self.editor_manager.change_layer(1)
+                    if event.key == K_4:
+                        self.editor_manager.change_layer(-1)
+                    if event.key == K_a:
+                        self.editor_manager.shift_x = "right"
+                    if event.key == K_f:
+                        self.editor_manager.shift_x = "left"
+                    if event.key == K_e:
+                        self.editor_manager.shift_y = "top"
+                    if event.key == K_d:
+                        self.editor_manager.shift_y = "bottom"
+
+                if event.type == pygame.KEYUP:
+                    if event.key == K_a:
+                        self.editor_manager.shift_x = None
+                    if event.key == K_f:
+                        self.editor_manager.shift_x = None
+                    if event.key == K_e:
+                        self.editor_manager.shift_y = None
+                    if event.key == K_d:
+                        self.editor_manager.shift_y = None
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:  # left click
-                        click = True
+                        if self.screen_size[0] - 200 < mouse_pos[0] < self.screen_size[0]:
+                            self.tileset_manager.click = True
+                        else:
+                            self.editor_manager.click = True
                     if event.button == 2:  # mouse wheel click
                         print("2")
                     if event.button == 3:  # right click
-                        print("3")
-                    if event.button == 4:  # anti-clock wise mouse wheel rotation
-                        self.tileset_manager.initial_pos_y += 16
-                        if self.tileset_manager.initial_pos_y > 50:
-                            self.tileset_manager.initial_pos_y = 50
+                        self.editor_manager.erase_click = True
 
+                    if event.button == 4:  # anti-clock wise mouse wheel rotation
+                        if self.screen_size[0] - 200 < mouse_pos[0] < self.screen_size[0]:
+                            self.tileset_manager.initial_pos_y += self.tile_size[0] * self.ratio
+                            if self.tileset_manager.initial_pos_y > 50:
+                                self.tileset_manager.initial_pos_y = 50
                     if event.button == 5:  # clock wise mouse wheel rotation
                         self.tileset_manager.initial_pos_y -= 16
 
-                # if event.type == pygame.MOUSEBUTTONUP:
-                #     if event.button == 1:  # left click
-                #         print("1")
+                if event.type == pygame.MOUSEBUTTONUP:
+                    if event.button == 1:  # left click
+                        self.editor_manager.click = False
                 #     if event.button == 2:  # mouse wheel click
                 #         print("2")
-                #     if event.button == 3:  # right click
-                #         print("3")
+                    if event.button == 3:  # right click
+                        self.editor_manager.erase_click = False
                 #     if event.button == 4:  # anti-clock wise mouse wheel rotation
                 #         print("4")
                 #     if event.button == 5:  # clock wise mouse wheel rotation
@@ -83,6 +129,7 @@ class GameWindow:
             self.screen.blit(self.tileset_display, (self.screen_size[0] - 200, 0))
             self.clock.clock.tick(self.clock.fps)
             pygame.display.update()
+
 
 if __name__ == "__main__":
     game = GameWindow()
