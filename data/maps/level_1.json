@@ -1,0 +1,62 @@
+{
+    "background": {
+        "(336, 128)": [
+            "outer_grass_tileset",
+            0
+        ],
+        "(320, 128)": [
+            "outer_grass_tileset",
+            0
+        ],
+        "(304, 128)": [
+            "outer_grass_tileset",
+            0
+        ],
+        "(288, 144)": [
+            "outer_grass_tileset",
+            0
+        ],
+        "(256, 144)": [
+            "outer_grass_tileset",
+            0
+        ],
+        "(240, 144)": [
+            "outer_grass_tileset",
+            0
+        ],
+        "(208, 144)": [
+            "outer_grass_tileset",
+            0
+        ],
+        "(192, 144)": [
+            "outer_grass_tileset",
+            0
+        ],
+        "(176, 160)": [
+            "outer_grass_tileset",
+            0
+        ],
+        "(160, 160)": [
+            "outer_grass_tileset",
+            0
+        ],
+        "(144, 160)": [
+            "outer_grass_tileset",
+            0
+        ],
+        "(128, 160)": [
+            "outer_grass_tileset",
+            0
+        ],
+        "(112, 160)": [
+            "outer_grass_tileset",
+            0
+        ],
+        "(96, 160)": [
+            "outer_grass_tileset",
+            0
+        ]
+    },
+    "platform": {},
+    "foreground": {}
+}

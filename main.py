@@ -42,6 +42,7 @@ class GameWindow:
             self.tileset_manager.display_tilesets(self.tileset_display, self.text, self.screen_size, mouse_pos,
                                                   self.tileset_manager.click)
 
+            self.editor_manager.show_map(self.editor_display)
             self.editor_display.blit(self.tileset_manager.tile, (((mouse_pos[0] // self.ratio) // 16) *
                                      16, ((mouse_pos[1] // self.ratio)
                                           // 16) * 16))
@@ -60,7 +61,6 @@ class GameWindow:
                             // 16) * 16]
                 self.editor_manager.remove_tile(pos)
 
-            self.editor_manager.show_map(self.editor_display)
 
             for event in pygame.event.get():
                 if event.type == QUIT:
@@ -83,6 +83,10 @@ class GameWindow:
                         self.editor_manager.shift_y = "top"
                     if event.key == K_d:
                         self.editor_manager.shift_y = "bottom"
+                    if event.key == K_s:
+                        self.editor_manager.save_map(self.tileset_manager.tileset_data)
+                    if event.key == K_i:
+                        self.editor_manager.load_map(self.tileset_manager.tileset_data)
 
                 if event.type == pygame.KEYUP:
                     if event.key == K_a:
